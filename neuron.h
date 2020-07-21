@@ -6,6 +6,7 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "cassert.h"
+#include "cmath.h"
 
 using namespace std;
 

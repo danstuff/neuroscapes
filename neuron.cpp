@@ -40,7 +40,8 @@ bool Neuron::getOutput(){
         output += inputs[i].value * inputs[i].weight;
     }
 
-    //TODO run output through a sigmoid function (?)
+    //run output through a basic linear sigmoid function
+    output = (2 / (1 + pow(5, output)) - 1;
     
     return output;
 }
