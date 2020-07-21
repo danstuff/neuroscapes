@@ -11,24 +11,30 @@ using namespace std;
 
 typedef unsigned int uint;
 
-const uint NEU_MAX_CON = 512;
+const uint NEU_MAX_CON = 32;
+
+struct NeuInput{
+    float value;
+    float weight;
+}
 
 class Neuron{
     private:
-        bool inputs[NEU_MAX_CON];
+        NeuInput inputs[NEU_MAX_CON];
         uint num_inputs;
 
-        uint threshold;
+        float bias;
 
     public:
-        Neuron(): num_inputs(0), threshold(0) {};
+        Neuron(uint num_ipts, float bias);
 
         void clearInputs();
+        void randomizeWeights();
 
-        void setInput(uint i);
-        void unsetInput(uint i);
+        void setInput(uint i, float value);
+        void setInputWeight(uint i, float weight);
 
-        bool getOutput();
+        float getOutput();
 };
 
 #endif
