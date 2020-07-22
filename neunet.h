@@ -3,31 +3,32 @@
 #ifndef NEUNET_H
 #define NEUNET_H
 
-#include "neuron.h"
+#include "util.h"
 
-//must be at least 3
-const uint NEUNET_NUM_LAYERS = 6;
+const uint16 NEUNET_DEPTH = 6; //must be at least 3
+const uint16 NEUNET_BREADTH = 8;
 
 class NeuNet{
     private:
-        Neuron layers[NEUNET_MAX_LAYER][NEU_MAX_CON];
+        neum biases[NEUNET_DEPTH-1][NEUNET_BREADTH];
+        neum weights[NEUNET_DEPTH-2][NEUNET_BREADTH][NEUNET_BREADTH];
 
-        uint num_inputs;
-        uint num_outputs;
+        uint16 num_inputs;
+        uint16 num_outputs;
+
+        neum getBias(uint16 layer, uint16 i);
+        neum getWeight(uint16 layer, uint16 i, uint16 j);
+
+        void setBias(uint16 layer, uint16 i, neum v);
+        void setWeight(uint16 layer, uint16 i, uint16 j, neum v);
+        
+        float getZ(uint16 l, uint16 i, neum* p);
 
     public:
-        NeuNet(uint num_in, uint num_out);
+        NeuNet(uint16 num_in, uint16 num_out);
 
-        void randomizeWeights();
-
-        uint getNumInputs();
-        uint getNumOutputs();
-
-        void run(uint* inputs);
-
-        uint getOutput(uint i);
-
-        void backPropagate(uint* expected);
+        void feedfwd(neum* a);
+        void backprop(neum* y);
 };
 
 #endif

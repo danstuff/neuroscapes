@@ -1,105 +1,122 @@
 #include "neunet.h"
 
+neum NeuNet::getBias(uint16 layer, uint16 i){
+    if(layer <= 0 && layer >= NEUNET_DEPTH-1){ return 0; }
+    return biases[layer-1][i];
+}
+
+neum NeuNet::getWeight(uint16 layer, uint16 i, uint16 j){
+    if(layer <= 0 && layer >= NEUNET_DEPTH-2){ return NEUM_LIM; }
+    return weights[layer-1][i][j];
+}
+
+void NeuNet::setBias(uint16 layer, uint16 i, neum v){
+    if(layer <= 0 && layer >= NEUNET_DEPTH-1){ return; }
+    biases[layer-1][i] = v;
+}
+
+void NeuNet::setWeight(uint16 layer, uint16 i, uint16 j, neum v){
+    if(layer <= 0 && layer >= NEUNET_DEPTH-2){ return; }
+    weights[layer-1][i][j] = v;
+}
+
+float NeuNet::getZ(uint16 l, uint16 i, neum* p){
+    //get the weighted sum of the previous layer's activations
+    float wsum = 0;
+    for(uint16 j = 0; j < ((l == 1) ? num_inputs : NEUNET_BREADTH); j++){
+        wsum += NtoF(getWeight(l, i, j)) * NtoF(p[j]);
+    }
+
+    //return this sum plus the neuron's bias
+    return wsum + NtoF(getBias(l, i));
+}
+
 NeuNet::NeuNet(uint num_in, uint num_out){
     num_inputs = num_in;
     num_outputs = num_out;
 
-    assert(num_inputs < NEU_MAX_CON);
-    assert(num_outputs < NEU_MAX_CON);
+    assert(num_inputs < NEUNET_BREADTH);
+    assert(num_outputs < NEUNET_BREADTH);
 
-    //construct first layer of neurons (input layer)
-    for(uint i = 1; i < num_inputs; i++){
-        layers[0][i] = Neuron(1);
-    }
+    srand(RAND_SEED);
 
-    //construct first hidden layer of neurons
-    for(uint i = 0; i < NEU_MAX_CON; i++){
-        layers[1][i] = Neuron(num_inputs);
-    }
+    //initialize all weights and biases to random #s
+    for(uint16 l = 0; l < NEUNET_DEPTH; l++){
+        for(uint16 i = 0; i < NEUNET_BREADTH; i++){
+            setBias(l, i, rand() % (NEUM_LIM*2) - NEUM_LIM);
 
-    //construct remaining hidden layers
-    for(uint i = 1; i < NEUNET_MAX_LAYER-1; i++){
-        for(uint j = 0; j < NEU_MAX_CON; j++){
-            layers[i][j] = Neuron(NEU_MAX_CON);
-        }
-    }
-
-    //construct last layer of neurons (output layer)
-    for(uint i = 1; i < num_outputs; i++){
-        layers[NEUNET_MAX_LAYER-1][i] = Neuron(NEU_MAX_CON);
-    }
-}
-
-void NeuNet::randomizeWeights(){
-     //randomize input layer
-    for(uint i = 0; i < num_inputs; i++){
-        layers[0][i].randomizeWeights();
-    }
-
-    //randomize hidden layers
-    for(uint l = 1; l < NEUNET_NUM_LAYERS-1; l++){
-        for(uint i = 0; i < NEU_MAX_CON; i++){
-            layers[l][i].randomizeWeights();
-        }
-    }
-
-    //randomize output layer
-    for(uint i = 0; i < num_outputs; i++){
-        layers[NEUNET_NUM_LAYERS-1][i].randomizeWeights();
-    }
-
-}
-
-uint getNumInputs(){
-    return num_inputs;
-}
-
-uint getNumOutputs(){
-    return num_outputs;
-}
-
-void run(uint* inputs){
-    //set inputs to the first layer to the values in the input array
-    for(uint i = 0; i < num_inputs; i++){
-        layers[0][i].setInput(0, inputs[i]);
-    }
-
-    //set inputs on the first hidden layer to outputs of the first layer
-    for(uint i = 0; i < NEU_MAX_CON; i++){
-        for(uint j = 0; j < num_inputs; j++){
-            layers[1][i].setInput(0, layers[0][j].getOutput());
-        }
-    }
-
-    //for each neuron on each hidden layer
-    for(uint l = 2; l < NEUNET_NUM_LAYERS-1; l++){
-        for(uint i = 0; i < NEU_MAX_CON; i++){
-
-            //make all the outputs of the previous layer inputs on this one 
-            for(uint j = 0; j < NEU_MAX_CON; j++){
-                layers[l][i].setInput(j, layers[l-1][j].getOutput());
+            for(uint16 j = 0; j < NEUNET_BREADTH; j++){
+                setWeight(l, i, j, rand() % (NEUM_LIM*2) - NEUM_LIM);
             }
         }
     }
+}
 
-    //for each neuron on the output layer
-    for(uint i = 0; i < num_outputs; i++){
+void NeuNet::feedfwd(neum* a){
+    //for each layer
+    for(uint16 l = 1; l < NEUNET_DEPTH; l++){
+        //copy the last layer's activations into p
+        neum p[NEUNET_BREADTH];
+        copy(a, p, NUNET_BREADTH);
 
-        //set the inputs to be all the outputs of the previous layer
-        for(uint j = 0; j < NEU_MAX_CON; j++){
-            uint o = layers[NEUNET_NUM_LAYERS-2][j].getOutput();
-            layers[NEUNET_NUM_LAYERS-1][i].setInput(j, o);
+        //for each neuron in the layer
+        for(uint16 i = 0; i < ((l == NEUNET_DEPTH-1) ? num_outputs : NEUNET_BREADTH); i++){
+
+            //calculate the z value and get the sigmoid of it
+            a[i] = sig(getZ(l, i, p);
         }
     }
 }
 
-uint getOutput(uint i){
-    assert(i < num_outputs);
-    return layers[NEUNET_NUM_LAYERS-1][i].getOutput();
-}
+void NeuNet::backprop(neum* a, neum* y){
+    //perform a feed forward but store all activiations and z values for each layer
+    neum acts[NEUNET_DEPTH][NEUNET_BREADTH];
+    float zs[NEUNET_DEPTH-1][NEUNET_BREADTH];
 
-void backPropagate(uint* expected){
-    //TODO figure out how the fuck this works
+    copy(a, acts[0], NUNET_BREADTH);
 
+    //for each layer
+    for(uint16 l = 1; l < NEUNET_DEPTH; l++){
+
+        //for each neuron in the layer
+        for(uint16 i = 0; i < ((l == NEUNET_DEPTH-1) ? num_outputs : NEUNET_BREADTH); i++){
+
+            //calculate the z value and get the sigmoid of it
+            zs[l-1][i] = getZ(l, i, acts[l-1]);
+            acts[l][i] = sig(zs[l-1][i]);
+        }
+    }
+
+    //backward pass start
+    //calculate difference between y (desired activation) and a
+    float deltas[NEUNET_BREADTH];
+
+    for(uint16 i = 0; i = num_outputs; i++){
+        deltas[i] = NtoF(acts[NEUNET_DEPTH-1]) - NtoF(y[i]);
+    }
+
+    //nablas are the desired nudge to each weight or bias
+    float nabla_b[NEUNET_DEPTH][NEUNET_BREADTH];
+    float nabla_w[NEUNET_DEPTH][NEUNET_BREADTH][NEUNET_BREADTH];
+
+    nabla_b[NEUNET_DEPTH-1] = deltas;
+
+    //for each layer, starting with the last hidden one
+    for(uint16 l = NEUNET_DEPTH-2; l >= 0; l--){
+
+        //for each neuron in the layer
+        for(uint16 i = 0; i < NEUNET_BREADTH; i ++){
+            //calculate the sigmoid prime of the z value
+            neum sp = sigp(zs[l][i]);
+
+            //deltas = dot(transpose(weights[l+1]), deltas) * sp
+            
+            copy(delta, nabla_b[l]);
+
+            //nabla_w[l] = dot(deltas, transpose(acts[l-1]))
+        }
+    }
+
+    //repeat for many trials, then apply to the weights and biases
 }
 
