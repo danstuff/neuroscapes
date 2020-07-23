@@ -11,7 +11,7 @@ int main(){
     //print result of feed forward
     cout << "Result: ";
 
-    for(uint16 i = 0; i < 3; i++;){
+    for(uint16 i = 0; i < 3; i++){
         cout << a[i] << ", ";
     }
 

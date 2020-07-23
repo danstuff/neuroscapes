@@ -1,14 +1,13 @@
 #pragma once
 
-#ifndef NEUNET_H
-#define NEUNET_H
+#ifndef UTIL_H
+#define UTIL_H
 
 #include "stdio.h"
 #include "stdlib.h"
-#include "cassert.h"
-#include "cmath.h"
-#include "random.h"
-#include "iostream.h"
+#include "assert.h"
+#include "math.h"
+#include <iostream>
 
 using namespace std;
 
@@ -31,10 +30,10 @@ neum sig(float z);
 float sigp(float z);
 
 void copy(float* a, float* b, uint16 size);
-void copy2d(float* a, float* b, uint16 size);
+void copy2d(float** a, float** b, uint16 size);
 
-void transpose(float* arr, float* ans, uint16 d, uint16 b);
+void transpose(float** arr, float** ans, uint16 d, uint16 b);
 
-void dot(float* a, float* b, float* ans, uint16 da, uint16 ba, uint16 db, uint16 bb);
+void dot(float** a, float** b, float** ans, uint16 da, uint16 ba, uint16 db, uint16 bb);
 
 #endif

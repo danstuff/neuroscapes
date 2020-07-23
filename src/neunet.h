@@ -22,7 +22,7 @@ class NeuNet{
         void setBias(uint16 layer, uint16 i, float v);
         void setWeight(uint16 layer, uint16 i, uint16 j, float v);
         
-        uint16 getLyrSize(uint16 l);
+        uint16 getLyrBreadth(uint16 l);
 
         float getZ(uint16 l, uint16 i, float* p);
 

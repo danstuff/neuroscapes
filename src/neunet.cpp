@@ -20,7 +20,7 @@ void NeuNet::setWeight(uint16 layer, uint16 i, uint16 j, float v){
     weights[layer-1][i][j] = FtoN(v);
 }
 
-uint16 getLyrBreadth(uint16 l){
+uint16 NeuNet::getLyrBreadth(uint16 l){
     if(l == 1){ return num_inputs; }
     if(l == NEUNET_DEPTH-1){ return num_outputs; }
     return NEUNET_BREADTH;
@@ -37,7 +37,7 @@ float NeuNet::getZ(uint16 l, uint16 i, float* p){
     return wsum + getBias(l, i);
 }
 
-NeuNet::NeuNet(uint num_in, uint num_out){
+NeuNet::NeuNet(uint16 num_in, uint16 num_out){
     num_inputs = num_in;
     num_outputs = num_out;
 
@@ -76,7 +76,7 @@ void NeuNet::feedfwd(float* a){
     for(uint16 l = 1; l < NEUNET_DEPTH; l++){
         //copy the last layer's activations into p
         float p[NEUNET_BREADTH];
-        copy(a, p, NUNET_BREADTH);
+        copy(a, p, NEUNET_BREADTH);
 
         //for each neuron in the layer
         for(uint16 i = 0; i < getLyrBreadth(l); i++){
@@ -92,7 +92,7 @@ void NeuNet::backprop(float* a, float* y){
     float acts[NEUNET_DEPTH][NEUNET_BREADTH];
     float zs[NEUNET_DEPTH-1][NEUNET_BREADTH];
 
-    copy(a, acts[0], NUNET_BREADTH);
+    copy(a, acts[0], NEUNET_BREADTH);
 
     //for each layer
     for(uint16 l = 1; l < NEUNET_DEPTH; l++){
@@ -113,7 +113,7 @@ void NeuNet::backprop(float* a, float* y){
     float deltas[NEUNET_BREADTH];
 
     for(uint16 i = 0; i = num_outputs; i++){
-        deltas[i] = acts[NEUNET_DEPTH-1] - y[i];
+        deltas[i] = acts[NEUNET_DEPTH-1][i] - y[i];
     }
 
     //nablas are the desired nudge to each weight or bias
@@ -121,7 +121,7 @@ void NeuNet::backprop(float* a, float* y){
     float nabla_w[NEUNET_DEPTH][NEUNET_BREADTH][NEUNET_BREADTH];
 
     //last layer's nabla b is just the activation deltas
-    copy(deltas, nabla_b[NEUNET_DEPTH-1]);
+    copy(deltas, nabla_b[NEUNET_DEPTH-1], NEUNET_BREADTH);
 
     //get the transpose of the last hidden layer's activations
     float act_tran[1][NEUNET_BREADTH];
@@ -140,7 +140,7 @@ void NeuNet::backprop(float* a, float* y){
         //dot product trasnpose of weights with the deltas
         float nd[NEUNET_BREADTH];
         dot(wei_tran, deltas, nd, NEUNET_BREADTH, NEUNET_BREADTH, NEUNET_BREADTH, 1); 
-        copy(nd, deltas);
+        copy(nd, deltas, NEUNET_BREADTH);
 
         //multiply each delta by the corresponding sig prime of z
         for(uint16 i = 0; i < NEUNET_BREADTH; i++){
@@ -148,7 +148,7 @@ void NeuNet::backprop(float* a, float* y){
         }
 
         //the new deltas are your nabla b
-        copy(deltas, nabla_b[l]);
+        copy(deltas, nabla_b[l], NEUNET_BREADTH);
 
         //get the transpose of the last hidden layer's activations
         float act_tran[1][NEUNET_BREADTH];

@@ -1,5 +1,5 @@
-NAME=bin/boomslap
-SRC=main game level menu music player box option colorwheel input ball
+NAME=bin/neuroscapes
+SRC=main neunet util
 
 ODIR=bin
 SDIR=src
@@ -8,7 +8,7 @@ CXX=g++
 CPPFLAGS=-g -MP -MD -I $(SDIR)
 
 LDFLAGS=-g -I $(SDIR)
-LDLIBS=-lsfml-graphics -lsfml-audio -lsfml-window -lsfml-system
+LDLIBS=
 
 OBJS=$(SRC:%=$(ODIR)/%.o)
 SRCS=$(SRC:%=$(SDIR)/%.cpp)

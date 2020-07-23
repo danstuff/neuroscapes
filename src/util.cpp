@@ -41,7 +41,7 @@ void copy(float* a, float* b, uint16 size){
     }
 }
 
-void copy2d(float* a, float* b, uint16 d, uint16 b){
+void copy2d(float** a, float** b, uint16 d, uint16 b){
     for(uint16 i = 0; i < d; i++){
         for(uint16 j = 0; j < b; j++){
             b[i][j] = a[i][j];
@@ -49,7 +49,7 @@ void copy2d(float* a, float* b, uint16 d, uint16 b){
     }
 }
 
-void transpose(float* arr, float* ans, uint16 d, uint16 b){
+void transpose(float** arr, float** ans, uint16 d, uint16 b){
     for(uint16 i = 0; i < d; i++){
         for(uint16 j = 0; j < b; j++){
             //swap i,j and j,i in the answer
@@ -64,7 +64,7 @@ void transpose(float* arr, float* ans, uint16 d, uint16 b){
     }
 }
 
-void dot(float* a, float* b, float* ans, uint16 da, uint16 ba, uint16 db, uint16 bb){
+void dot(float** a, float** b, float** ans, uint16 da, uint16 ba, uint16 db, uint16 bb){
     assert(ba == db);
 
     for(uint16 i = 0; i < da; i++){
