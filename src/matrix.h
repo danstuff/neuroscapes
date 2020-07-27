@@ -14,8 +14,12 @@ class Matrix{
 
     public:
         Matrix(uint16 d, uint16 b);
+        
         Matrix(float** orig_data, uint16 d, uint16 b);
         Matrix(float* orig_data, uint16 d);
+
+        Matrix(neum** orig_data, uint16 d, uint16 b);
+        Matrix(neum* orig_data, uint16 d);
 
         uint16 getDepth();
         uint16 getBreadth();

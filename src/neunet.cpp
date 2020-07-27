@@ -1,25 +1,5 @@
 #include "neunet.h"
 
-float NeuNet::getBias(uint16 layer, uint16 i){
-    if(layer <= 0 && layer >= NEUNET_DEPTH-1){ return 0; }
-    return NtoF(biases[layer-1][i]);
-}
-
-float NeuNet::getWeight(uint16 layer, uint16 i, uint16 j){
-    if(layer <= 0 && layer >= NEUNET_DEPTH-2){ return NEUM_LIM; }
-    return NtoF(weights[layer-1][i][j]);
-}
-
-void NeuNet::setBias(uint16 layer, uint16 i, float v){
-    if(layer <= 0 && layer >= NEUNET_DEPTH-1){ return; }
-    biases[layer-1][i] = FtoN(v);
-}
-
-void NeuNet::setWeight(uint16 layer, uint16 i, uint16 j, float v){
-    if(layer <= 0 && layer >= NEUNET_DEPTH-2){ return; }
-    weights[layer-1][i][j] = FtoN(v);
-}
-
 uint16 NeuNet::getLyrBreadth(uint16 l){
     if(l == 1){ return NEUNET_INPUTS; }
     if(l == NEUNET_DEPTH-1){ return NEUNET_OUTPUTS; }
@@ -39,18 +19,22 @@ NeuNet::NeuNet(uint16 num_in, uint16 num_out){
     for(uint16 l = 0; l < NEUNET_DEPTH; l++){
         cout << "Layer " << l << ":" << endl;
 
-        for(uint16 i = 0; i < NEUNET_BREADTH; i++){
+        for(uint16 i = 0; i < getLyrBreadth(l); i++){
             cout << "  Neuron " << i << ":" << endl;
 
-            setBias(l, i, randf(0.0f, 1.0f));
+            //input and output layers have no bias
+            biases[l][i] = (l == 0 || l == NEUNET_DEPTH-1) ? 
+                            0 : FtoN(randf(0.0f, 1.0f));
             
-            cout << "   Bias: " << getBias(l, i) <<  endl;
+            cout << "   Bias: " << biases[l][i] <<  endl;
             cout << "   Weights: (";
 
-            for(uint16 j = 0; j < NEUNET_BREADTH; j++){
-                setWeight(l, i, j, randf(0.0f, 1.0f));
+            for(uint16 j = 0; j < getLyrBreadth(l-1); j++){
+                //input and output layers have weight 1
+                weights[l][i][j] = (l == 0 || l == NEUNET_DEPTH-1) ? 
+                                    1 : FtoN(randf(0.0f, 1.0f));
 
-                cout << getWeight(l, i, j) << ",";
+                cout << weights[l][i][j] << ",";
             }
 
             cout << ")" << endl;
@@ -62,7 +46,7 @@ void NeuNet::feedfwd(float* a){
     //feeds the array a through every layer of the neural net
     Matrix am(a, NEUNET_BREADTH);
 
-    //for each layer
+    //for each hidden layer
     for(uint16 l = 1; l < NEUNET_DEPTH; l++){
 
         //copy the last layer's activations into pm
@@ -78,16 +62,16 @@ void NeuNet::feedfwd(float* a){
 }
 
 void NeuNet::backprop(float* a, float* y){
-    Matrix ys(y, NEUNET_OUTPUTS);
-
     //perform a feed forward but store all activiations and z values for each layer
     Matrix as[NEUNET_DEPTH];
     Matrix zs[NEUNET_DEPTH-1];
 
+    Matrix ys(y, NEUNET_OUTPUTS);
+
     //0th layer activations are stored in a
     as[0] = Matrix(a, NEUNET_BREADTH);
 
-    //for each layer
+    //for each non-input layer
     for(uint16 l = 1; l < NEUNET_DEPTH; l++){
 
         //convert the weights+biases for this layer into matricies
@@ -119,7 +103,8 @@ void NeuNet::backprop(float* a, float* y){
     for(uint16 l = NEUNET_DEPTH-2; l > 0; l--){
 
         //dot product trasnpose of weights of last layer with the deltas
-        deltas = deltas.dot(weights[l+1].transpose());
+        Matrix wm(weights[l+1], getLyrBreadth(l+1), getLyrBreadth(l));
+        deltas = deltas.dot(wm.transpose());
 
         //also multiply by the sigmoid prime of the z values
         deltas = deltas.dot(zs[l].sigp());

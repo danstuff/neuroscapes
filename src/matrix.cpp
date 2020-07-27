@@ -37,6 +37,30 @@ Matrix::Matrix(float* orig_data, uint16 d){
     }
 }
 
+Matrix::Matrix(neum** orig_data, uint16 d, uint16 b){
+    assert(d <= MAT_SIZE && b <= MAT_SIZE);
+
+    depth = d;
+    breadth = b;
+
+    for(uint16 i = 0; i < d; i++){
+        for(uint16 j = 0; j < b; j++){
+            data[i][j] = NtoF(orig_data[i][j]);
+        }
+    }
+}
+
+Matrix::Matrix(neum* orig_data, uint16 d){
+    assert(d <= MAT_SIZE);
+
+    depth = d;
+    breadth = 1;
+
+    for(uint16 i = 0; i < d; i++){
+        data[i][1] = NtoF(orig_data[i]);
+    }
+}
+
 uint16 Matrix::getDepth(){
     return depth;
 }
@@ -59,7 +83,7 @@ Matrix Matrix::transpose(){
     for(uint16 i = 0; i < getDepth(); i++){
         for(uint16 j = 0; j < getBreadth(); j++){
             //swap i,j and j,i in the answer
-            ans.set(j, i, get(i, j));
+            ans.getData()[j][i] = getData()[i][j];
         }
     }
 
@@ -74,7 +98,7 @@ Matrix Matrix::add(Matrix& b){
 
     for(uint16 i = 0; i < getDepth(); i++){
         for(uint16 j = 0; j < getBreadth(); j++){
-            ans.getData()[i][j] = data[i][j] + b[i][j];
+            ans.getData()[i][j] = getData()[i][j] + b.getData()[i][j];
         }
     }
 
@@ -89,7 +113,7 @@ Matrix Matrix::sub(Matrix& b){
 
     for(uint16 i = 0; i < getDepth(); i++){
         for(uint16 j = 0; j < getBreadth(); j++){
-            ans.getData()[i][j] = data[i][j] - b[i][j];
+            ans.getData()[i][j] = getData()[i][j] - b.getData()[i][j];
         }
     }
 
@@ -106,7 +130,7 @@ Matrix Matrix::dot(Matrix& b){
             ans.getData()[i][j] = 0;
 
             for(uint16 k = 0; k < getBreadth(); k++){
-                ans.getData()[i][j] += data[i][k]*b.getData()[k][j];
+                ans.getData()[i][j] += getData()[i][k]*b.getData()[k][j];
             }
         }
     }
@@ -119,7 +143,7 @@ Matrix Matrix::sig(){
 
     for(uint16 i = 0; i < getDepth(); i++){
         for(uint16 j = 0; j < getBreadth(); j++){
-            ans.getData()[i][j] = sig(ans.getData()[i][j]);
+            ans.getData()[i][j] = sig(getData()[i][j]);
         }
     }
 
@@ -131,7 +155,7 @@ Matrix Matrix::sigp(){
 
     for(uint16 i = 0; i < getDepth(); i++){
         for(uint16 j = 0; j < getBreadth(); j++){
-            ans.getData()[i][j] = sigp(ans.getData()[i][j]);
+            ans.getData()[i][j] = sigp(getData()[i][j]);
         }
     }
 
