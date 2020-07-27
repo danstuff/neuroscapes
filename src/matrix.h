@@ -17,17 +17,20 @@ class Matrix{
         Matrix(float** orig_data, uint16 d, uint16 b);
         Matrix(float* orig_data, uint16 d);
 
-        float get(uint16 i, uint16 j);
-
-        void set(uint16 i, uint16 j, float value);
-        void add(uint16 i, uint16 j, float value);
-
         uint16 getDepth();
         uint16 getBreadth();
 
+        float** getData();
+
         Matrix copy();
+
         Matrix transpose();
+        
+        Matrix add(Matrix& b);
         Matrix dot(Matrix& b);
+
+        Matrix sig();
+        Matrix sigp();
 }
 
 #endif

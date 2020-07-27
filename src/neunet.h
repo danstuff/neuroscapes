@@ -5,16 +5,16 @@
 
 #include "util.h"
 
-const uint16 NEUNET_DEPTH = 6; //must be at least 3
+const uint16 NEUNET_INPUTS = 3;
+const uint16 NEUNET_OUTPUTS = 3;
+
+const uint16 NEUNET_DEPTH = 4; //must be at least 3 
 const uint16 NEUNET_BREADTH = 3;
 
 class NeuNet{
     private:
         neum biases[NEUNET_DEPTH-1][NEUNET_BREADTH];
         neum weights[NEUNET_DEPTH-2][NEUNET_BREADTH][NEUNET_BREADTH];
-
-        uint16 num_inputs;
-        uint16 num_outputs;
 
         float getBias(uint16 layer, uint16 i);
         float getWeight(uint16 layer, uint16 i, uint16 j);
@@ -27,7 +27,7 @@ class NeuNet{
         float getZ(uint16 l, uint16 i, float* p);
 
     public:
-        NeuNet(uint16 num_in, uint16 num_out);
+        NeuNet();
 
         void feedfwd(float* a);
         void backprop(float* a, float* y);

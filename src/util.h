@@ -26,7 +26,7 @@ neum FtoN(float v);
 
 float randf(float min, float max);
 
-neum sig(float z);
+float sig(float z);
 float sigp(float z);
 
 #endif
