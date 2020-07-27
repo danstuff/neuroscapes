@@ -5,7 +5,7 @@
 
 #include "util.h"
 
-const uint16 MAT_SIZE = 256;
+const uint16 MAT_SIZE = 16;
 
 class Matrix{
     private:
@@ -13,6 +13,8 @@ class Matrix{
         uint16 depth, breadth;
 
     public:
+        Matrix(){};
+
         Matrix(uint16 d, uint16 b);
         
         Matrix(float** orig_data, uint16 d, uint16 b);
@@ -35,6 +37,6 @@ class Matrix{
 
         Matrix sig();
         Matrix sigp();
-}
+};
 
 #endif

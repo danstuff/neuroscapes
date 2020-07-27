@@ -1,7 +1,7 @@
 #include "neunet.h"
 
 int main(){
-    NeuNet neunet(3, 3);
+    NeuNet neunet;
 
     //feed some test values into the net
     float a[3] = { 1, 0, 1 }; 

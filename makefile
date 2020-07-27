@@ -1,5 +1,5 @@
 NAME=bin/neuroscapes
-SRC=main neunet util
+SRC=main neunet matrix util
 
 ODIR=bin
 SDIR=src

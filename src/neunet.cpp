@@ -6,10 +6,7 @@ uint16 NeuNet::getLyrBreadth(uint16 l){
     return NEUNET_BREADTH;
 }
 
-NeuNet::NeuNet(uint16 num_in, uint16 num_out){
-    num_inputs = num_in;
-    num_outputs = num_out;
-
+NeuNet::NeuNet(){
     assert(NEUNET_INPUTS < NEUNET_BREADTH);
     assert(NEUNET_OUTPUTS < NEUNET_BREADTH);
 
@@ -54,7 +51,7 @@ void NeuNet::feedfwd(float* a){
 
         //convert the weights+biases for this layer into matricies
         Matrix wm(weights[l], getLyrBreadth(l), getLyrBreadth(l-1));
-        Matrix bm(biases[l], getLyrBreadth(l), 1);
+        Matrix bm(biases[l], getLyrBreadth(l));
 
         //next activations = sigmoid((old a's * weights) + biases)
         am = am.dot(wm).add(bm).sig();
@@ -76,7 +73,7 @@ void NeuNet::backprop(float* a, float* y){
 
         //convert the weights+biases for this layer into matricies
         Matrix wm(weights[l], getLyrBreadth(l), getLyrBreadth(l-1));
-        Matrix bm(biases[l], getLyrBreadth(l), 1);
+        Matrix bm(biases[l], getLyrBreadth(l));
         
         //calculate the z and activation values for this layer
         zs[l] = as[l-1].dot(wm).add(bm);

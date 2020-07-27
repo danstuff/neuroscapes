@@ -4,6 +4,7 @@
 #define NEUNET_H
 
 #include "util.h"
+#include "matrix.h"
 
 const uint16 NEUNET_INPUTS = 3;
 const uint16 NEUNET_OUTPUTS = 3;
