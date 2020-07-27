@@ -32,8 +32,10 @@ class Matrix{
 
         Matrix transpose();
         
-        Matrix add(Matrix& b);
-        Matrix dot(Matrix& b);
+        Matrix add(Matrix b);
+        Matrix sub(Matrix b);
+
+        Matrix dot(Matrix b);
 
         Matrix sig();
         Matrix sigp();

@@ -90,7 +90,7 @@ Matrix Matrix::transpose(){
     return ans;
 }
 
-Matrix Matrix::add(Matrix& b){
+Matrix Matrix::add(Matrix b){
     assert(getDepth() == b.getDepth() &&
             getBreadth() == b.getBreadth());
 
@@ -105,7 +105,7 @@ Matrix Matrix::add(Matrix& b){
     return ans;
 }
 
-Matrix Matrix::sub(Matrix& b){
+Matrix Matrix::sub(Matrix b){
     assert(getDepth() == b.getDepth() &&
             getBreadth() == b.getBreadth());
 
@@ -120,7 +120,7 @@ Matrix Matrix::sub(Matrix& b){
     return ans;
 }
 
-Matrix Matrix::dot(Matrix& b){
+Matrix Matrix::dot(Matrix b){
     assert(getBreadth() == b.getDepth());
     
     Matrix ans(getDepth(), b.getBreadth());
