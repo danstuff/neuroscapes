@@ -13,31 +13,7 @@ Matrix::Matrix(uint16 d, uint16 b){
     }
 }
 
-Matrix::Matrix(float** orig_data, uint16 d, uint16 b){
-    assert(d <= MAT_SIZE && b <= MAT_SIZE);
-
-    depth = d;
-    breadth = b;
-
-    for(uint16 i = 0; i < d; i++){
-        for(uint16 j = 0; j < b; j++){
-            data[i][j] = orig_data[i][j];
-        }
-    }
-}
-
-Matrix::Matrix(float* orig_data, uint16 d){
-    assert(d <= MAT_SIZE);
-
-    depth = d;
-    breadth = 1;
-
-    for(uint16 i = 0; i < d; i++){
-        data[i][1] = orig_data[i];
-    }
-}
-
-Matrix::Matrix(neum** orig_data, uint16 d, uint16 b){
+Matrix::Matrix(neum* orig_data[MAT_ACCEPT], uint16 d, uint16 b){
     assert(d <= MAT_SIZE && b <= MAT_SIZE);
 
     depth = d;
@@ -58,6 +34,17 @@ Matrix::Matrix(neum* orig_data, uint16 d){
 
     for(uint16 i = 0; i < d; i++){
         data[i][1] = NtoF(orig_data[i]);
+    }
+}
+
+Matrix::Matrix(float* orig_data, uint16 d){
+    assert(d <= MAT_SIZE);
+
+    depth = d;
+    breadth = 1;
+
+    for(uint16 i = 0; i < d; i++){
+        data[i][1] = orig_data[i];
     }
 }
 

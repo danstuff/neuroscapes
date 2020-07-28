@@ -6,6 +6,7 @@
 #include "util.h"
 
 const uint16 MAT_SIZE = 16;
+const uint16 MAT_ACCEPT = 3;
 
 class Matrix{
     private:
@@ -17,11 +18,10 @@ class Matrix{
 
         Matrix(uint16 d, uint16 b);
         
-        Matrix(float** orig_data, uint16 d, uint16 b);
-        Matrix(float* orig_data, uint16 d);
-
-        Matrix(neum** orig_data, uint16 d, uint16 b);
+        Matrix(neum* orig_data[MAT_ACCEPT], uint16 d, uint16 b);
         Matrix(neum* orig_data, uint16 d);
+
+        Matrix(float* orig_data, uint16 d);
 
         uint16 getDepth();
         uint16 getBreadth();
