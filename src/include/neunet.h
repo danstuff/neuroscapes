@@ -6,11 +6,11 @@
 #include "include/util.h"
 #include "include/matrix.h"
 
-const uint16 NEUNET_INPUTS = 3;
-const uint16 NEUNET_OUTPUTS = 3;
+const uint16 NEUNET_INPUTS = 1;
+const uint16 NEUNET_OUTPUTS = 1;
 
-const uint16 NEUNET_DEPTH = 4;
-const uint16 NEUNET_BREADTH = 3;
+const uint16 NEUNET_DEPTH = 3;
+const uint16 NEUNET_BREADTH = 1;
 
 class NeuNet{
     private:
@@ -22,8 +22,12 @@ class NeuNet{
     public:
         NeuNet();
 
+        void print();
+
         void feedfwd(Matrix& a, Matrix* a_collect = NULL, Matrix* z_collect = NULL);
-        void backprop(Matrix& a, Matrix& y);
+        void backprop(Matrix* trial_as, Matrix* trial_ys, 
+                      uint16 num_trials, uint16 total_size, 
+                      float learn_rate, float reg);
 };
 
 #endif

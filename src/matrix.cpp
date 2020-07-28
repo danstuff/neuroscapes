@@ -83,7 +83,7 @@ Matrix Matrix::copy(){
 }
 
 Matrix Matrix::transpose(){
-    Matrix ans(depth, breadth);
+    Matrix ans(breadth, depth);
 
     for(uint16 i = 0; i < depth; i++){
         for(uint16 j = 0; j < breadth; j++){
@@ -141,6 +141,23 @@ Matrix Matrix::dot(Matrix b){
 
     return ans;
 }
+
+Matrix Matrix::mul(Matrix b){
+    assert(depth == b.depth &&
+            breadth == b.breadth);
+
+    Matrix ans(depth, breadth);
+
+    for(uint16 i = 0; i < depth; i++){
+        for(uint16 j = 0; j < breadth; j++){
+            ans.data[i][j] = data[i][j] * b.data[i][j];
+        }
+    }
+
+    return ans;
+}
+
+
 
 Matrix Matrix::sig(){
     Matrix ans(depth, breadth);
