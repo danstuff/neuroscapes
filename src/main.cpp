@@ -1,21 +1,18 @@
-#include "neunet.h"
+#include "include/neunet.h"
 
 int main(){
     NeuNet neunet;
 
     //feed some test values into the net
-    float a[3] = { 1, 0, 1 }; 
+    float af[] = { 1.0f, 0.0f, 1.0f };
+    Matrix a(af, 3); 
 
     neunet.feedfwd(a);
 
     //print result of feed forward
     cout << "Result: ";
 
-    for(uint16 i = 0; i < 3; i++){
-        cout << a[i] << ", ";
-    }
-
-    cout << endl;
+    a.print();
     
     //wait forever
     while(true);

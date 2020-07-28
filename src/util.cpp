@@ -1,4 +1,4 @@
-#include "util.h"
+#include "include/util.h"
 
 float NtoF(neum v){
     //convert neum into a float
@@ -13,12 +13,12 @@ neum FtoN(float v){
 }
 
 float randf(float min, float max){
-    return (rand() % ((uint32)(max-min)*RAND_MUL))/RAND_MUL + min;
+    return (rand() % ((uint32)(max-min)*RAND_MUL))/((float)RAND_MUL) + min;
 }
 
 float sigmoid(float z){
     //sigmoid
-    return 1 / (1 + exp(z));
+    return 1 / (1 + exp(-z));
 }
 
 float sigmoidp(float z){

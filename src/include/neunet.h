@@ -3,8 +3,8 @@
 #ifndef NEUNET_H
 #define NEUNET_H
 
-#include "util.h"
-#include "matrix.h"
+#include "include/util.h"
+#include "include/matrix.h"
 
 const uint16 NEUNET_INPUTS = 3;
 const uint16 NEUNET_OUTPUTS = 3;
@@ -22,8 +22,8 @@ class NeuNet{
     public:
         NeuNet();
 
-        void feedfwd(float* a);
-        void backprop(float* a, float* y);
+        void feedfwd(Matrix& a, Matrix* a_collect = NULL, Matrix* z_collect = NULL);
+        void backprop(Matrix& a, Matrix& y);
 };
 
 #endif

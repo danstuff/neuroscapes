@@ -1,4 +1,4 @@
-#include "matrix.h"
+#include "include/matrix.h"
 
 Matrix::Matrix(uint16 d, uint16 b){
     assert(d <= MAT_SIZE && b <= MAT_SIZE);
@@ -34,7 +34,7 @@ Matrix::Matrix(neum* orig_data, uint16 d){
     breadth = 1;
 
     for(uint16 i = 0; i < d; i++){
-        data[i][1] = NtoF(orig_data[i]);
+        data[i][0] = NtoF(orig_data[i]);
     }
 }
 
@@ -46,8 +46,8 @@ Matrix::Matrix(float orig_data[MAT_SIZE][MAT_SIZE], uint16 d, uint16 b){
 
     for(uint16 i = 0; i < d; i++){
         for(uint16 j = 0; j < b; j++){
-	    data[i][j] = orig_data[i][j];
-	}
+            data[i][j] = orig_data[i][j];
+        }
     }
 }
 
@@ -58,8 +58,24 @@ Matrix::Matrix(float* orig_data, uint16 d){
     breadth = 1;
 
     for(uint16 i = 0; i < d; i++){
-        data[i][1] = orig_data[i];
+        data[i][0] = orig_data[i];
     }
+}
+
+void Matrix::print(){
+    cout << "[" << endl;
+
+    for(uint16 i = 0; i < depth; i++){
+        cout << "[";
+
+        for(uint16 j = 0; j < breadth; j++){
+            cout << data[i][j] << ", ";
+        }
+
+        cout << "]" << endl;
+    }
+
+    cout << "]" << endl;
 }
 
 Matrix Matrix::copy(){

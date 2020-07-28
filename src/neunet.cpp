@@ -1,4 +1,4 @@
-#include "neunet.h"
+#include "include/neunet.h"
 
 uint16 NeuNet::getLyrBreadth(uint16 l){
     if(l == 1){ return NEUNET_INPUTS; }
@@ -20,18 +20,18 @@ NeuNet::NeuNet(){
             cout << "  Neuron " << i << ":" << endl;
 
             //input and output layers have no bias
-            biases[l][i] = (l == 0 || l == NEUNET_DEPTH-1) ? 
+            biases[l][i] = (l == 0) ? 
                             0 : FtoN(randf(0.0f, 1.0f));
             
-            cout << "   Bias: " << biases[l][i] <<  endl;
+            cout << "   Bias: " << NtoF(biases[l][i]) <<  endl;
             cout << "   Weights: (";
 
             for(uint16 j = 0; j < getLyrBreadth(l-1); j++){
                 //input and output layers have weight 1
-                weights[l][i][j] = (l == 0 || l == NEUNET_DEPTH-1) ? 
-                                    1 : FtoN(randf(0.0f, 1.0f));
+                weights[l][i][j] = (l == 0 ) ? 
+                                    FtoN(1) : FtoN(randf(0.0f, 1.0f));
 
-                cout << weights[l][i][j] << ",";
+                cout << NtoF(weights[l][i][j]) << ",";
             }
 
             cout << ")" << endl;
@@ -39,52 +39,45 @@ NeuNet::NeuNet(){
     }
 }
 
-void NeuNet::feedfwd(float* a){
+void NeuNet::feedfwd(Matrix& a, Matrix* a_collect, Matrix* z_collect){
     //feeds the array a through every layer of the neural net
-    Matrix am(a, NEUNET_BREADTH);
+    if(a_collect != NULL){
+        a_collect[0] = a.copy();
+    }
 
     //for each hidden layer
     for(uint16 l = 1; l < NEUNET_DEPTH; l++){
 
-        //copy the last layer's activations into pm
-        Matrix pm = am.copy();
-
         //convert the weights+biases for this layer into matricies
-        Matrix wm(weights[l], getLyrBreadth(l), getLyrBreadth(l-1));
-        Matrix bm(biases[l], getLyrBreadth(l));
+        Matrix w(weights[l], getLyrBreadth(l), getLyrBreadth(l-1));
+        Matrix b(biases[l], getLyrBreadth(l));
 
         //next activations = sigmoid((old a's * weights) + biases)
-        am = am.dot(wm).add(bm).sig();
+        Matrix z = w.dot(a).add(b);
+        a = z.sig();
+
+        if(a_collect != NULL){
+            a_collect[l] = a.copy();
+        }
+
+        if(z_collect != NULL){
+            z_collect[l] = z.copy();
+        }
     }
 }
 
-void NeuNet::backprop(float* a, float* y){
-    //perform a feed forward but store all activiations and z values for each layer
+void NeuNet::backprop(Matrix& a, Matrix& y){
+    //perform a feed forward and store activiations and z values for each layer
     Matrix as[NEUNET_DEPTH];
-    Matrix zs[NEUNET_DEPTH-1];
+    Matrix zs[NEUNET_DEPTH];
 
-    Matrix ys(y, NEUNET_OUTPUTS);
-
-    //0th layer activations are stored in a
-    as[0] = Matrix(a, NEUNET_BREADTH);
-
-    //for each non-input layer
-    for(uint16 l = 1; l < NEUNET_DEPTH; l++){
-
-        //convert the weights+biases for this layer into matricies
-        Matrix wm(weights[l], getLyrBreadth(l), getLyrBreadth(l-1));
-        Matrix bm(biases[l], getLyrBreadth(l));
-        
-        //calculate the z and activation values for this layer
-        zs[l] = as[l-1].dot(wm).add(bm);
-        as[l] = zs[l].sig();
-    }
+    feedfwd(a, as, zs);
 
     //backward pass start
     //ABANDON ALL HOPE YE WHO ENTER HERE
     
     //calculate difference between y (desired activation) and a
-    Matrix deltas = as[NEUNET_DEPTH-1].sub(ys);
+    Matrix deltas = as[NEUNET_DEPTH-1].sub(y);
 
     //nablas are the desired nudge to each weight or bias
     Matrix nabla_b[NEUNET_DEPTH];
