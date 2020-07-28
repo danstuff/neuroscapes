@@ -7,8 +7,8 @@ uint16 NeuNet::getLyrBreadth(uint16 l){
 }
 
 NeuNet::NeuNet(){
-    assert(NEUNET_INPUTS < NEUNET_BREADTH);
-    assert(NEUNET_OUTPUTS < NEUNET_BREADTH);
+    assert(NEUNET_INPUTS <= NEUNET_BREADTH);
+    assert(NEUNET_OUTPUTS <= NEUNET_BREADTH);
 
     srand(RAND_SEED);
 

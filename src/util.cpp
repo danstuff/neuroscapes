@@ -13,15 +13,15 @@ neum FtoN(float v){
 }
 
 float randf(float min, float max){
-    return (rand() % ((max-min)*RAND_MUL))/RAND_MUL + min;
+    return (rand() % ((uint32)(max-min)*RAND_MUL))/RAND_MUL + min;
 }
 
-float sig(float z){
+float sigmoid(float z){
     //sigmoid
     return 1 / (1 + exp(z));
 }
 
-float sigp(float z){
+float sigmoidp(float z){
     //derivative of sigmoid
-    return sig(z)*(1-sig(z));
+    return sigmoid(z)*(1-sigmoid(z));
 }
