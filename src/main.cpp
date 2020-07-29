@@ -2,38 +2,46 @@
 
 NeuNet neunet;
 
+float zer[] = { 0.0f };
+float one[] = { 1.0f };
+
 void feed(){
     neunet.print();
 
      //feed some test values into the net
-    float arr[] = { 0.0f };
-    Matrix a(arr, 1); 
-
+    Matrix a(zer, 1); 
     neunet.feedfwd(a);
 
     //print result of feed forward
-    cout << "Result: ";
+    cout << "Result (a=0): ";
     a.print();
 
+     //feed some test values into the net
+    Matrix b(one, 1); 
+    neunet.feedfwd(b);
+
+    //print result of feed forward
+    cout << "Result (a=1): ";
+    b.print();
+
+    cout << endl;
 }
 
 int main(){
 
     feed();
 
-    cout << endl;
-
     for(uint16 i = 0; i < 1000; i++){
-        float af[] = { 0.0f };
-        Matrix a(af, 1);
+        Matrix a[2];
+        a[0] = Matrix(zer, 1);
+        a[1] = Matrix(one, 1);
 
-        float yf[] = { 0.5f };
-        Matrix y(yf, 1);
+        Matrix y[2];
+        y[0] = Matrix(one, 1);
+        y[1] = Matrix(zer, 1);
 
-        neunet.backprop(&a, &y, 1, 1, 0.5, 0.005);
+        neunet.backprop(a, y, 2, 2, 5, 0.0001);
     }
-    
-    cout << endl;
     
     feed();
    
