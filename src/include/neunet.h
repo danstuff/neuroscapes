@@ -14,8 +14,8 @@ const uint16 NEUNET_BREADTH = 1;
 
 class NeuNet{
     private:
-        neum biases[NEUNET_DEPTH][NEUNET_BREADTH];
-        neum weights[NEUNET_DEPTH][NEUNET_BREADTH][NEUNET_BREADTH];
+        float biases[NEUNET_DEPTH][NEUNET_BREADTH];
+        float weights[NEUNET_DEPTH][NEUNET_BREADTH][NEUNET_BREADTH];
         
         uint16 getLyrBreadth(uint16 l);
 

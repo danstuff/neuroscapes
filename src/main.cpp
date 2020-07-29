@@ -21,15 +21,19 @@ int main(){
 
     feed();
 
-    for(uint16 i = 0; i < 1; i++){
+    cout << endl;
+
+    for(uint16 i = 0; i < 1000; i++){
         float af[] = { 0.0f };
         Matrix a(af, 1);
 
-        float yf[] = { 1.0f };
+        float yf[] = { 0.5f };
         Matrix y(yf, 1);
 
-        neunet.backprop(&a, &y, 1, 1, 1, 1);
+        neunet.backprop(&a, &y, 1, 1, 0.5, 0.005);
     }
+    
+    cout << endl;
     
     feed();
    
