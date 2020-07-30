@@ -1,2 +1,2 @@
 # neuroscapes
-A game that experiments with machine learning
+A C++ environment for experimentation with basic neural networks.
