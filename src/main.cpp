@@ -2,14 +2,21 @@
 
 NeuNet neunet;
 
-float zer[] = { 0.0f };
-float one[] = { 1.0f };
+float zer[] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+       		0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+	       	0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+	       	0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
+
+float one[] = { 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+       		0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+	       	0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+	       	0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
 
 void feed(){
     neunet.print();
 
      //feed some test values into the net
-    Matrix a(zer, 1); 
+    Matrix a(zer, 32); 
     neunet.feedfwd(a);
 
     //print result of feed forward
@@ -17,7 +24,7 @@ void feed(){
     a.print();
 
      //feed some test values into the net
-    Matrix b(one, 1); 
+    Matrix b(one, 2); 
     neunet.feedfwd(b);
 
     //print result of feed forward

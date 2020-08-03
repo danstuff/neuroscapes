@@ -5,8 +5,7 @@
 
 #include "include/util.h"
 
-const uint16 MAT_SIZE = 1;
-//const uint16 MAT_ACCEPT = 1;
+const uint16 MAT_SIZE = 32;
 
 class Matrix{
     public:
