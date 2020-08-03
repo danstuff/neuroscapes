@@ -1,7 +1,7 @@
 #include "include/neunet.h"
 
 uint16 NeuNet::getLyrBreadth(uint16 l){
-    if(l == 1){ return NEUNET_INPUTS; }
+    if(l == 0){ return NEUNET_INPUTS; }
     if(l == NEUNET_DEPTH-1){ return NEUNET_OUTPUTS; }
     return NEUNET_BREADTH;
 }

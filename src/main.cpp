@@ -7,20 +7,20 @@ float zer[] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
 	       	0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
 	       	0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
 
-float one[] = { 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+float one[] = { 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
        		0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
 	       	0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
 	       	0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
 
 void feed(){
-    neunet.print();
+    //neunet.print();
 
      //feed some test values into the net
-    Matrix a(zer, 32); 
+    Matrix a(zer, 2); 
     neunet.feedfwd(a);
 
     //print result of feed forward
-    cout << "Result (a=0): ";
+    cout << "Result (zer): ";
     a.print();
 
      //feed some test values into the net
@@ -28,7 +28,7 @@ void feed(){
     neunet.feedfwd(b);
 
     //print result of feed forward
-    cout << "Result (a=1): ";
+    cout << "Result (one): ";
     b.print();
 
     cout << endl;
@@ -40,12 +40,12 @@ int main(){
 
     for(uint16 i = 0; i < 1000; i++){
         Matrix a[2];
-        a[0] = Matrix(zer, 1);
-        a[1] = Matrix(one, 1);
+        a[0] = Matrix(zer, 2);
+        a[1] = Matrix(one, 2);
 
         Matrix y[2];
-        y[0] = Matrix(one, 1);
-        y[1] = Matrix(zer, 1);
+        y[0] = Matrix(one, 2);
+        y[1] = Matrix(zer, 2);
 
         neunet.backprop(a, y, 2, 2, 5, 0.0001);
     }
