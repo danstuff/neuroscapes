@@ -157,3 +157,15 @@ Matrix Matrix::sigp(){
 
     return ans;
 }
+
+Matrix Matrix::trunc(){
+    Matrix ans(depth, breadth);
+
+    for(uint16 i = 0; i < depth; i++){
+        for(uint16 j = 0; j < breadth; j++){
+            ans.data[i][j] = truncate(data[i][j]);
+        }
+    }
+
+    return ans;
+}

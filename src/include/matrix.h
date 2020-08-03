@@ -32,6 +32,9 @@ class Matrix{
 
         Matrix sig();
         Matrix sigp();
+
+
+        Matrix trunc();
 };
 
 #endif

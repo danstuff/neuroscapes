@@ -6,10 +6,10 @@
 #include "include/util.h"
 #include "include/matrix.h"
 
-const uint16 NEUNET_INPUTS = 2;
+const uint16 NEUNET_INPUTS = 32;
 const uint16 NEUNET_OUTPUTS = 2;
 
-const uint16 NEUNET_DEPTH = 26;
+const uint16 NEUNET_DEPTH = 8;
 const uint16 NEUNET_BREADTH = 32;
 
 class NeuNet{

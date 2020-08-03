@@ -96,14 +96,14 @@ void NeuNet::backprop(Matrix* trial_as, Matrix* trial_ys,
         feedfwd(trial_as[trial], as, zs);
         
         //begin backward pass
+        const uint16 last = NEUNET_DEPTH-1;
+
         //calculate difference between y (desired activation) and a
-        Matrix deltas = as[NEUNET_DEPTH-1].sub(trial_ys[trial]);
+        Matrix deltas = as[last].sub(trial_ys[trial]);
 
         //nablas are the desired nudge to each weight or bias
         Matrix d_nabla_b[NEUNET_DEPTH];
         Matrix d_nabla_w[NEUNET_DEPTH];
-
-        const uint16 last = NEUNET_DEPTH-1;
 
         //last layer's nabla b is just the activation deltas
         d_nabla_b[last] = deltas.copy();
@@ -116,11 +116,13 @@ void NeuNet::backprop(Matrix* trial_as, Matrix* trial_ys,
         nabla_w[last] = nabla_w[last].add(d_nabla_w[last]);
 
         //for each layer, starting with the last hidden one
-        for(uint16 l = NEUNET_DEPTH-2; l > 0; l--){
-
+        for(uint16 l = last-1; l > 0; l--){
+            
             //set deltas to transpose of weights . deltas * sigp(zs)
+            Matrix sp = zs[l].sigp();
             Matrix w(weights[l+1], getLyrBreadth(l+1), getLyrBreadth(l));
-            deltas = w.transpose().dot(deltas).mul(zs[l].sigp());
+
+            deltas = w.transpose().dot(deltas).mul(sp);
 
             //the new deltas are your nabla b
             d_nabla_b[l] = deltas.copy();
@@ -145,7 +147,7 @@ void NeuNet::backprop(Matrix* trial_as, Matrix* trial_ys,
             float b = biases[l][i];
             float nb = nabla_b[l].data[i][0];
 
-            b = b - ((float)learn_rate/(float)num_trials)*nb;
+            b = b - (learn_rate/(float)num_trials)*nb;
            
             biases[l][i] = b;
 
@@ -156,6 +158,7 @@ void NeuNet::backprop(Matrix* trial_as, Matrix* trial_ys,
                 float w = weights[l][i][j];
                 float nw = nabla_w[l].data[i][j];
 
+                //(1-eta*(lmbda/n))*w-(eta/len(mini_batch))*nw
                 w = (1-learn_rate*(reg/(float)total_size))*w -
                     (learn_rate/(float)num_trials)*nw;
 
