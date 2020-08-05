@@ -24,6 +24,9 @@ class NeuNet{
 
         void print();
 
+        void write(const char* filename);
+        void read(const char* filename);
+
         void feedfwd(Matrix& a, Matrix* a_collect = NULL, Matrix* z_collect = NULL);
         void backprop(Matrix* trial_as, Matrix* trial_ys, 
                       uint16 num_trials, uint16 total_size, 

@@ -47,6 +47,57 @@ void NeuNet::print(){
     }
 }
 
+void NeuNet::write(const char* filename){
+    ofstream  file(filename, ios::out | ios::binary);
+
+    //for every layer
+    for(uint16 l = 1; l < NEUNET_DEPTH; l++){
+
+        //for every neuron
+        for(uint16 i = 0; i < getLyrBreadth(l); i++){
+
+            //output the bias
+            file.write((char*)&biases[l][i], 4);
+            
+            //for every weight
+            for(uint16 j = 0; j < getLyrBreadth(l-1); j++){
+
+                //output the weight
+                file.write((char*)&weights[l][i][j], 4);
+            }
+        }
+    }
+
+    file.close();
+}
+
+void NeuNet::read(const char* filename){
+    ifstream  file(filename, ios::in | ios::binary);
+
+    //ensure file actually exists
+    if(!file.is_open()){ return; }
+
+    //for every layer
+    for(uint16 l = 1; l < NEUNET_DEPTH; l++){
+
+        //for every neuron
+        for(uint16 i = 0; i < getLyrBreadth(l); i++){
+
+            //read the bias
+            file.read((char*)&biases[l][i], 4);
+            
+            //for every weight
+            for(uint16 j = 0; j < getLyrBreadth(l-1); j++){
+
+                //read the weight
+                file.read((char*)&weights[l][i][j], 4);
+            }
+        }
+    }
+
+    file.close();
+}
+
 void NeuNet::feedfwd(Matrix& a, Matrix* a_collect, Matrix* z_collect){
     //feeds the array a through every layer of the neural net
     if(a_collect != NULL){
