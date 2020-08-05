@@ -1,5 +1,5 @@
-NAME=bin/neuroscapes
-SRC=main neunet matrix util
+NAME=bin/neuroscapes.dll
+SRC=neunet matrix util
 
 ODIR=bin
 SDIR=src
@@ -7,7 +7,7 @@ SDIR=src
 CXX=g++
 CPPFLAGS=-g -MP -MD -I $(SDIR)
 
-LDFLAGS=-g -I $(SDIR)
+LDFLAGS=-g -shared -I $(SDIR)
 LDLIBS=
 
 OBJS=$(SRC:%=$(ODIR)/%.o)

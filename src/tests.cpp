@@ -45,9 +45,12 @@ void feed(){
 int main(){
 
     neunet.read("test.dat");
+
+    neunet.print();
+
     feed();
 
-    /*for(uint16 i = 0; i < 100; i++){
+    for(uint16 i = 0; i < 100; i++){
         Matrix a[2];
         a[0] = Matrix(zer, NEUNET_INPUTS);
         a[1] = Matrix(one, NEUNET_INPUTS);
@@ -61,7 +64,7 @@ int main(){
     
     feed();
 
-    neunet.write("test.dat");*/
+    neunet.write("test.dat");
    
     //wait forever
     while(true);
