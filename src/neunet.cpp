@@ -114,6 +114,9 @@ void NeuNet::feedfwd(Matrix& a, Matrix* a_collect, Matrix* z_collect){
         //next activations = sigmoid((old a's * weights) + biases)
         Matrix z = w.dot(a).add(b);
         a = z.sig();
+
+        //confirm that the depth of a is same as the layer breadth
+        a.depth = getLyrBreadth(l);
         
         if(a_collect != NULL){
             a_collect[l] = a.copy();

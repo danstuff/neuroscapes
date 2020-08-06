@@ -3,7 +3,7 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
-#include "include/util.h"
+#include "util.h"
 
 const uint16 MAT_SIZE = 32;
 

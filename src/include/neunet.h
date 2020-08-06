@@ -3,11 +3,11 @@
 #ifndef NEUNET_H
 #define NEUNET_H
 
-#include "include/util.h"
-#include "include/matrix.h"
+#include "util.h"
+#include "matrix.h"
 
 const uint16 NEUNET_INPUTS = 32;
-const uint16 NEUNET_OUTPUTS = 32;
+const uint16 NEUNET_OUTPUTS = 1;
 
 const uint16 NEUNET_DEPTH = 8;
 const uint16 NEUNET_BREADTH = 32;
