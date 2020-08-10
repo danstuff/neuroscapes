@@ -69,5 +69,7 @@ int main(){
     
     //write the final neural network to a file
     neunet.write("test.dat");
+    
+    return 0;
 }
 ```
