@@ -48,7 +48,7 @@ void NeuNet::print(){
 }
 
 void NeuNet::write(const char* filename){
-    ofstream  file(filename, ios::out | ios::binary);
+    ofstream file(filename, ios::out | ios::binary);
 
     //for every layer
     for(uint16 l = 1; l < NEUNET_DEPTH; l++){
@@ -72,7 +72,7 @@ void NeuNet::write(const char* filename){
 }
 
 void NeuNet::read(const char* filename){
-    ifstream  file(filename, ios::in | ios::binary);
+    ifstream file(filename, ios::in | ios::binary);
 
     //ensure file actually exists
     if(!file.is_open()){ return; }
