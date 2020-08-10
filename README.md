@@ -21,7 +21,7 @@ To link a C++ project with the neuroscapes library, you will need to put its hea
 ### Example code
 The below code uses the neuroscapes library to create a neural network that acts as a simple bit flipper.
 ```c++
-#include "include/neunet.h"
+#include "neuroscapes/neunet.h"
 
 NeuNet neunet;
 
