@@ -20,36 +20,13 @@ float one[] = { 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
                 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
                 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f };
 
-void feed(){
-    //neunet.print();
-
-     //feed some test values into the net
-    Matrix a(zer, NEUNET_INPUTS); 
-    neunet.feedfwd(a);
-
-    //print result of feed forward
-    cout << "Result (zer): ";
-    a.trunc().print();
-
-     //feed some test values into the net
-    Matrix b(one, NEUNET_INPUTS); 
-    neunet.feedfwd(b);
-
-    //print result of feed forward
-    cout << "Result (one): ";
-    b.trunc().print();
-
-    cout << endl << endl;
-}
-
 int main(){
+    //feed a matrix of alternating bits through the neural network and print the result
+    Matrix a0(zer, NEUNET_INPUTS); 
+    neunet.feedfwd(a0);
+    a0.trunc().print();
 
-    neunet.read("test.dat");
-
-    neunet.print();
-
-    feed();
-
+    //train the neural network 200 times with alternating bits
     for(uint16 i = 0; i < 100; i++){
         Matrix a[2];
         a[0] = Matrix(zer, NEUNET_INPUTS);
@@ -62,10 +39,13 @@ int main(){
         neunet.backprop(a, y, 2, 200, 1, 0.001);
     }
     
-    feed();
-
+    //feed a matrix of alternating bits through the neural network and print the result
+    Matrix a1(zer, NEUNET_INPUTS); 
+    neunet.feedfwd(a1);
+    a1.trunc().print();
+    
+    //write the final neural network to a file
     neunet.write("test.dat");
-   
-    //wait forever
-    while(true);
+    
+    return 0;
 }

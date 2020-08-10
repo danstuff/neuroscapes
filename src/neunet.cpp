@@ -10,8 +10,6 @@ NeuNet::NeuNet(){
     assert(NEUNET_INPUTS <= NEUNET_BREADTH);
     assert(NEUNET_OUTPUTS <= NEUNET_BREADTH);
 
-    srand(RAND_SEED);
-
     //initialize all weights and biases to random #s
     for(uint16 l = 0; l < NEUNET_DEPTH; l++){
         for(uint16 i = 0; i < getLyrBreadth(l); i++){

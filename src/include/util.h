@@ -16,8 +16,6 @@ typedef unsigned short int uint16;
 typedef unsigned int uint32;
 
 const uint16 RAND_MUL = 1000;
-const uint16 RAND_SEED = 123;
-
 const uint16 ROUND_MUL = 1000;
 
 float randf(float min, float max);
