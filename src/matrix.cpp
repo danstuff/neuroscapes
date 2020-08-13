@@ -1,39 +1,38 @@
 #include "include/matrix.h"
 
 Matrix::Matrix(uint16 d, uint16 b){
-    assert(d <= MAT_SIZE && b <= MAT_SIZE);
-
+    //initialize a 2d matrix of zeros
     depth = d;
     breadth = b;
 
     for(uint16 i = 0; i < d; i++){
+        data.push_back(vector<float>());
         for(uint16 j = 0; j < b; j++){
-            data[i][j] = 0;
+            data.at(i).push_back(0);
         }
     }
 }
 
 Matrix::Matrix(float* orig_data, uint16 d){
-    assert(d <= MAT_SIZE);
-
+    //initialize a 1d matrix filled with original data
     depth = d;
     breadth = 1;
 
     for(uint16 i = 0; i < d; i++){
-        data[i][0] = orig_data[i];
+        data.push_back(vector<float>());
+        data.at(i).push_back(orig_data[i]);
     }
 }
 
-Matrix::Matrix(float orig_data[MAT_SIZE][MAT_SIZE], uint16 d, uint16 b){
-    assert(d <= MAT_SIZE);
+void Matrix::setRow(uint16 row, float* orig_data){
+    assert(row < depth);
 
-    depth = d;
-    breadth = b;
+    //clear the row
+    data.at(row) = vector<float>();
 
-    for(uint16 i = 0; i < d; i++){
-        for(uint16 j = 0; j < b; j++){
-            data[i][j] = orig_data[i][j];
-        }
+    //fill row with given data
+    for(uint16 j = 0; j < breadth; j++){
+        data.at(row).push_back(orig_data[j]);
     }
 }
 
@@ -44,7 +43,7 @@ void Matrix::print(){
         cout << "[";
 
         for(uint16 j = 0; j < breadth; j++){
-            cout << data[i][j] << ", ";
+            cout << data.at(i).at(j) << ", ";
         }
 
         cout << "]" << endl;
@@ -54,7 +53,15 @@ void Matrix::print(){
 }
 
 Matrix Matrix::copy(){
-    return Matrix(data, depth, breadth);
+    Matrix m(depth, breadth);
+    
+    for(uint16 i = 0; i < depth; i++){
+        for(uint16 j = 0; j < breadth; j++){
+            m.data.at(i).at(j) = data.at(i).at(j);
+        }
+    }
+
+    return m;
 }
 
 Matrix Matrix::transpose(){
@@ -63,7 +70,7 @@ Matrix Matrix::transpose(){
     for(uint16 i = 0; i < depth; i++){
         for(uint16 j = 0; j < breadth; j++){
             //swap i,j and j,i in the answer
-            ans.data[j][i] = data[i][j];
+            ans.data.at(j).at(i) = data.at(i).at(j);
         }
     }
 
@@ -77,7 +84,7 @@ Matrix Matrix::add(Matrix b){
 
     for(uint16 i = 0; i < depth; i++){
         for(uint16 j = 0; j < breadth; j++){
-            ans.data[i][j] = data[i][j] + b.data[i][j];
+            ans.data.at(i).at(j) = data.at(i).at(j) + b.data.at(i).at(j);
         }
     }
 
@@ -92,7 +99,7 @@ Matrix Matrix::sub(Matrix b){
 
     for(uint16 i = 0; i < depth; i++){
         for(uint16 j = 0; j < breadth; j++){
-            ans.data[i][j] = data[i][j] - b.data[i][j];
+            ans.data.at(i).at(j) = data.at(i).at(j) - b.data.at(i).at(j);
         }
     }
 
@@ -106,10 +113,10 @@ Matrix Matrix::dot(Matrix b){
 
     for(uint16 i = 0; i < depth; i++){
         for(uint16 j = 0; j < b.breadth; j++){
-            ans.data[i][j] = 0;
+            ans.data.at(i).at(j) = 0;
 
             for(uint16 k = 0; k < breadth; k++){
-                ans.data[i][j] += data[i][k]*b.data[k][j];
+                ans.data.at(i).at(j) += data.at(i).at(k)*b.data.at(k).at(j);
             }
         }
     }
@@ -125,7 +132,7 @@ Matrix Matrix::mul(Matrix b){
 
     for(uint16 i = 0; i < depth; i++){
         for(uint16 j = 0; j < breadth; j++){
-            ans.data[i][j] = data[i][j] * b.data[i][j];
+            ans.data.at(i).at(j) = data.at(i).at(j) * b.data.at(i).at(j);
         }
     }
 
@@ -139,7 +146,7 @@ Matrix Matrix::sig(){
 
     for(uint16 i = 0; i < depth; i++){
         for(uint16 j = 0; j < breadth; j++){
-            ans.data[i][j] = sigmoid(data[i][j]);
+            ans.data.at(i).at(j) = sigmoid(data.at(i).at(j));
         }
     }
 
@@ -151,7 +158,7 @@ Matrix Matrix::sigp(){
 
     for(uint16 i = 0; i < depth; i++){
         for(uint16 j = 0; j < breadth; j++){
-            ans.data[i][j] = sigmoidp(data[i][j]);
+            ans.data.at(i).at(j) = sigmoidp(data.at(i).at(j));
         }
     }
 
@@ -163,7 +170,7 @@ Matrix Matrix::trunc(){
 
     for(uint16 i = 0; i < depth; i++){
         for(uint16 j = 0; j < breadth; j++){
-            ans.data[i][j] = truncate(data[i][j]);
+            ans.data.at(i).at(j) = truncate(data.at(i).at(j));
         }
     }
 

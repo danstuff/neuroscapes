@@ -5,19 +5,18 @@
 
 #include "util.h"
 
-const uint16 MAT_SIZE = 32;
-
 class Matrix{
     public:
-        float data[MAT_SIZE][MAT_SIZE];
+        vector<vector<float>> data;
         uint16 depth, breadth;
 
         Matrix(){};
 
         Matrix(uint16 d, uint16 b);
         Matrix(float* orig_data, uint16 d);
-        Matrix(float orig_data[MAT_SIZE][MAT_SIZE], uint16 d, uint16 b);
 
+        void setRow(uint16 row, float* orig_data);
+        
         void print();
 
         Matrix copy();

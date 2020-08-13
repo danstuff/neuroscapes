@@ -6,11 +6,11 @@
 #include "util.h"
 #include "matrix.h"
 
-const uint16 NEUNET_INPUTS = 32;
+const uint16 NEUNET_INPUTS = 24;
 const uint16 NEUNET_OUTPUTS = 1;
 
 const uint16 NEUNET_DEPTH = 8;
-const uint16 NEUNET_BREADTH = 32;
+const uint16 NEUNET_BREADTH = 16;
 
 class NeuNet{
     private:
@@ -18,6 +18,8 @@ class NeuNet{
         float weights[NEUNET_DEPTH][NEUNET_BREADTH][NEUNET_BREADTH];
         
         uint16 getLyrBreadth(uint16 l);
+
+        Matrix fillMatWithWeights(uint16 l);
 
     public:
         NeuNet();

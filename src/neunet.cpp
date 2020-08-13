@@ -6,10 +6,17 @@ uint16 NeuNet::getLyrBreadth(uint16 l){
     return NEUNET_BREADTH;
 }
 
-NeuNet::NeuNet(){
-    assert(NEUNET_INPUTS <= NEUNET_BREADTH);
-    assert(NEUNET_OUTPUTS <= NEUNET_BREADTH);
+Matrix NeuNet::fillMatWithWeights(uint16 l){
+    Matrix m(getLyrBreadth(l), getLyrBreadth(l-1));
 
+    for(uint16 i = 0; i < getLyrBreadth(l); i++){
+        m.setRow(i, weights[l][i]);
+    }
+
+    return m;
+}
+
+NeuNet::NeuNet(){
     //initialize all weights and biases to random #s
     for(uint16 l = 0; l < NEUNET_DEPTH; l++){
         for(uint16 i = 0; i < getLyrBreadth(l); i++){
@@ -106,7 +113,7 @@ void NeuNet::feedfwd(Matrix& a, Matrix* a_collect, Matrix* z_collect){
     for(uint16 l = 1; l < NEUNET_DEPTH; l++){
 
         //convert the weights+biases for this layer into matricies
-        Matrix w(weights[l], getLyrBreadth(l), getLyrBreadth(l-1));
+        Matrix w = fillMatWithWeights(l);
         Matrix b(biases[l], getLyrBreadth(l));
 
         //next activations = sigmoid((old a's * weights) + biases)
@@ -137,6 +144,7 @@ void NeuNet::backprop(Matrix* trial_as, Matrix* trial_ys,
         nabla_b[l] = Matrix(getLyrBreadth(l), 1);
         nabla_w[l] = Matrix(getLyrBreadth(l), getLyrBreadth(l-1));
     }
+
 
     //for each trial
     for(uint16 trial = 0; trial < num_trials; trial++){
@@ -172,7 +180,7 @@ void NeuNet::backprop(Matrix* trial_as, Matrix* trial_ys,
             
             //set deltas to transpose of weights . deltas * sigp(zs)
             Matrix sp = zs[l].sigp();
-            Matrix w(weights[l+1], getLyrBreadth(l+1), getLyrBreadth(l));
+            Matrix w = fillMatWithWeights(l+1);
 
             deltas = w.transpose().dot(deltas).mul(sp);
 
