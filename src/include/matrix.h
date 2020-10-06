@@ -11,9 +11,9 @@ class Matrix{
         uint16 depth, breadth;
 
         Matrix(){};
-
         Matrix(uint16 d, uint16 b);
-        Matrix(float* orig_data, uint16 d);
+
+        void patternFill(float a, float b);
 
         void setRow(uint16 row, float* orig_data);
         

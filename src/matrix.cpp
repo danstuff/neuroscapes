@@ -13,14 +13,12 @@ Matrix::Matrix(uint16 d, uint16 b){
     }
 }
 
-Matrix::Matrix(float* orig_data, uint16 d){
-    //initialize a 1d matrix filled with original data
-    depth = d;
-    breadth = 1;
-
-    for(uint16 i = 0; i < d; i++){
-        data.push_back(vector<float>());
-        data.at(i).push_back(orig_data[i]);
+void Matrix::patternFill(float a, float b){
+    //alternate between a and b in even/odd columns
+    for(uint16 i = 0; i < depth; i++){
+        for(uint16 j = 0; j < breadth; j++){
+            data.at(i).at(j) = (i%2 == 0) a : b;
+        }
     }
 }
 
@@ -54,7 +52,7 @@ void Matrix::print(){
 
 Matrix Matrix::copy(){
     Matrix m(depth, breadth);
-    
+
     for(uint16 i = 0; i < depth; i++){
         for(uint16 j = 0; j < breadth; j++){
             m.data.at(i).at(j) = data.at(i).at(j);
@@ -108,7 +106,7 @@ Matrix Matrix::sub(Matrix b){
 
 Matrix Matrix::dot(Matrix b){
     assert(breadth == b.depth);
-    
+
     Matrix ans(depth, b.breadth);
 
     for(uint16 i = 0; i < depth; i++){

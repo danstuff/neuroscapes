@@ -2,24 +2,6 @@
 
 NeuNet neunet;
 
-float zer[] = { 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-                0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-                0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-                0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-                0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-                0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-                0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-                0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f };
-
-float one[] = { 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-                1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-                1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-                1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-                1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-                1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-                1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-                1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f };
-
 int main(){
     //feed a matrix of alternating bits through the neural network and print the result
     Matrix a0(zer, NEUNET_INPUTS); 
@@ -29,12 +11,20 @@ int main(){
     //train the neural network 200 times with alternating bits
     for(uint16 i = 0; i < 100; i++){
         Matrix a[2];
-        a[0] = Matrix(zer, NEUNET_INPUTS);
-        a[1] = Matrix(one, NEUNET_INPUTS);
+
+        a[0] = Matrix(NEUNET_INPUTS, 1);
+        a[0].patternFill(0.0f, 1.0f);
+
+        a[1] = Matrix(NEUNET_INPUTS, 1);
+        a[0].patternFill(1.0f, 0.0f);
 
         Matrix y[2];
-        y[0] = Matrix(one, NEUNET_OUTPUTS);
-        y[1] = Matrix(zer, NEUNET_OUTPUTS);
+
+        y[0] = Matrix(NEUNET_OUTPUTS, 1);
+        y[0].patternFill(1.0f, 0.0f);
+
+        y[1] = Matrix(NEUNET_OUTPUTS, 1);
+        y[0].patternFill(0.0f, 1.0f);
 
         neunet.backprop(a, y, 2, 200, 1, 0.001);
     }
